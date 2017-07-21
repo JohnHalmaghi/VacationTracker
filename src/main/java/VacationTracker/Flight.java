@@ -36,4 +36,6 @@ public class Flight {
     public void setPrice(double flightPrice){ price = flightPrice; }
 
     public double getPrice(){ return price; }
+
+
 }
