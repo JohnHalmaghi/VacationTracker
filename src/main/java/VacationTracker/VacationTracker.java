@@ -1,6 +1,9 @@
 package VacationTracker;
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by john on 7/20/17.
@@ -8,10 +11,15 @@ import javax.swing.*;
 public class VacationTracker extends JFrame {
 
     JButton submitButton;
+    JTextArea departureFlight, destinationFlight;
     JTextField startDate, endDate;
     JComboBox month, day, year;
+    JList departureAirport, destinationAirport;
+    DefaultListModel defListModel = new DefaultListModel();
+    JScrollPane depScroller, destScroller;
+    JSpinner spinner1, spinner2, spinner3;
 
-    public static void main(String[] args){
+    public static void main2(String[] args){
 
         new VacationTracker();
 
@@ -28,34 +36,52 @@ public class VacationTracker extends JFrame {
 
         JPanel thePanel = new JPanel();
 
+        thePanel.setLayout(new GridLayout(0,2,2,2));
 
-        String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        departureFlight = new JTextArea("Departure Flight: ");
 
-        Integer[] days = new Integer[31];
-        for(Integer i = 0, j =1 ; i<31; j++, i++){ //make method?
-            days[i] = j;
+
+        thePanel.add(departureFlight);
+
+        String[] airports = {"SAN", "LAX", "FAT", "JFK", "SEA", "PAX"};
+
+        departureAirport = new JList(defListModel);
+
+        destScroller = new JScrollPane(departureAirport, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        departureAirport.setFixedCellHeight(25);
+
+        departureAirport.setFixedCellWidth(50);
+
+        departureAirport.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        thePanel.add(destScroller);
+
+        for(String airport: airports){
+            defListModel.addElement(airport);
         }
 
-        Integer[] years = new Integer[5];
-        for(Integer i = 0, j = 2017; i<5; i++,j++){
-            years[i] = j;
-        }
+        destinationAirport = new JList(defListModel);
 
+        depScroller = new JScrollPane(destinationAirport, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
+        destinationAirport.setFixedCellHeight(25);
 
-        day = new JComboBox(days);
+        destinationAirport.setFixedCellWidth(50);
 
-        month = new JComboBox(months);
+        destinationAirport.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        year = new JComboBox(years);
+        thePanel.add(depScroller);
 
-        JTextArea beginDate = new JTextArea("Begin Date: ");
+        Date todaysDate = new Date();
 
+        spinner2 = new JSpinner(new SpinnerDateModel(todaysDate, null, null, Calendar.DAY_OF_MONTH));
 
-        thePanel.add(beginDate);
-        thePanel.add(month);
-        thePanel.add(day);
-        thePanel.add(year);
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(spinner2, "MM/dd/yyyy");
+
+        spinner2.setEditor(dateEditor);
+
+        thePanel.add(spinner2);
 
         submitButton = new JButton("Submit");
 
