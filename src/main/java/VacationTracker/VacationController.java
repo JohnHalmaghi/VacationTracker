@@ -2,6 +2,7 @@ package VacationTracker;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 public class VacationController {
 
@@ -17,14 +18,14 @@ public class VacationController {
 
 
     private class SubmitListener implements ActionListener {
-        String depAirport, destAirport, depDate, destDate;
-        int numOfPassenger;
         public void actionPerformed(ActionEvent actionEvent) {
-            depAirport = theView.getDepAirpot();
-            destAirport = theView.getDestAirpot();
-            depDate = theView.getDepDate();
-            destDate = theView.getDestDate();
-            numOfPassenger = theView.getNumOfPassengers();
+            Flight f = new Flight();
+            f.setSourceCity(theView.getDepAirpot());
+            f.setDestinationCity(theView.getDestAirpot());
+            f.setDepDate(theView.getDepDate());
+            f.setRetDate(theView.getDestDate());
+            f.setNumberOfPassengers(theView.getNumOfPassengers());
+            theModel.addFlightToListOfFlights(f);
         }
     }
 }

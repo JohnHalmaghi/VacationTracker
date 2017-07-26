@@ -1,4 +1,5 @@
 package VacationTracker;
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.text.SimpleDateFormat;
@@ -9,21 +10,26 @@ import java.util.Calendar;
  */
 public class VacationView extends JFrame {
 
-    private JLabel depFlight = new JLabel("Departure Flight Information: ");
+    private JLabel depFlight = new JLabel("Departure Flight Information:   "); //extra spaces for alignment
     private JLabel destFlight = new JLabel("Destination Flight Information: ");
     private JLabel numberOfPassengersLabel = new JLabel("Number of Passengers: ");
+    private JLabel date = new JLabel("Date: ");
+    private JLabel date2 = new JLabel("Date: ");
     private DefaultListModel defListModel = new DefaultListModel();
     private JList depAirports, destAirports;
     private JScrollPane depScroller, destScroller;
-    private JSpinner depDate, destDate, numOfPassengers = new JSpinner();
+    SpinnerNumberModel model1 = new SpinnerNumberModel(1, 1, 15, 1);
+    private JSpinner depDate, destDate, numOfPassengers = new JSpinner(model1);
     private JButton submitButton = new JButton("Submit");
-    JRadioButton monthOrDate = new JRadioButton(); //TO-DO add radio button that lets user choose a specific date, or cheapest flight within a month
+    JRadioButton monthOrDate = new JRadioButton();
+    //TO-DO add radio button that lets user choose a specific date, or cheapest flight within a month
     String[] airports = {"SAN", "LAX", "FAT", "JFK", "SEA", "PAX"};
 
 
     VacationView(){
         JPanel vacPanel = new JPanel();
-        this.setSize(600, 400);
+        vacPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 20));
+        this.setSize(700, 350);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setTitle("Vacation Tracker");
@@ -49,14 +55,20 @@ public class VacationView extends JFrame {
         depDate.setEditor(depDateEditor);
         destDate.setEditor(destDateEditor);
 
+        ListenForSubmit lForSubmit = new ListenForSubmit();
+        submitButton.addActionListener(lForSubmit);
+
         vacPanel.add(depFlight);
         vacPanel.add(depScroller);
+        vacPanel.add(date2);
         vacPanel.add(depDate);
         vacPanel.add(numberOfPassengersLabel);
         vacPanel.add(numOfPassengers);
         vacPanel.add(destFlight);
         vacPanel.add(destScroller);
+        vacPanel.add(date);
         vacPanel.add(destDate);
+        vacPanel.add(submitButton);
 
         this.add(vacPanel);
         this.setVisible(true);
@@ -70,12 +82,12 @@ public class VacationView extends JFrame {
         return (String) destAirports.getSelectedValue();
     }
 
-    public String getDepDate(){
-        return (new SimpleDateFormat("mm/dd/yyyy").format(depDate.getValue()));
+    public Date getDepDate() { //TEST to make sure this works
+        return ((Date) depDate.getValue());
     }
 
-    public String getDestDate(){
-        return (new SimpleDateFormat("mm/dd/yyyy").format(destDate.getValue()));
+    public Date getDestDate(){
+        return ((Date) destDate.getValue());
     }
 
     public int getNumOfPassengers(){
@@ -85,6 +97,17 @@ public class VacationView extends JFrame {
     void addSubmitListener(ActionListener listenerForSubmitButton){
         submitButton.addActionListener(listenerForSubmitButton);
     }
+
+    private class ListenForSubmit implements ActionListener {
+        public void actionPerformed(ActionEvent actionEvent) {
+
+            if(actionEvent.getSource() == submitButton){
+                JOptionPane.showMessageDialog(VacationView.this, "Airport of Departure: "+ getDepAirpot() + "\nDeparture Date: " + getDepDate() + "\nDestination Airport: " + getDestAirpot() + "\nReturn Date: " + getDestDate()+ "\nNumber of Passengers: "+getNumOfPassengers());
+            }
+
+        }
+    }
+
 
     //add error message/check?
 }
