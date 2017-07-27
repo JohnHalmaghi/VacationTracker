@@ -8,7 +8,7 @@ public class VacationModel {
     private int numOfDays, numOfLayovers;
     private double cost;
     public Flight flight;
-    private ArrayList<Flight> listOfFlight = new ArrayList<Flight>();
+    protected ArrayList<Flight> listOfFlight = new ArrayList<Flight>();
 
     public void addFlightToListOfFlights(Flight flight){
         listOfFlight.add(flight);
