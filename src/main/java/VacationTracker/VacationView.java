@@ -2,6 +2,9 @@ package VacationTracker;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Calendar;
@@ -13,6 +16,7 @@ public class VacationView extends JFrame {
     private JLabel depFlight = new JLabel("Departure Flight Information:   "); //extra spaces for alignment
     private JLabel destFlight = new JLabel("Destination Flight Information: ");
     private JLabel numberOfPassengersLabel = new JLabel("Number of Passengers: ");
+    private JLabel enterPhoneNumber = new JLabel("Enter Phone Number: ");
     private JLabel date = new JLabel("Date: ");
     private JLabel date2 = new JLabel("Date: ");
     private DefaultListModel defListModel = new DefaultListModel();
@@ -21,6 +25,7 @@ public class VacationView extends JFrame {
     SpinnerNumberModel model1 = new SpinnerNumberModel(1, 1, 15, 1);
     private JSpinner depDate, destDate, numOfPassengers = new JSpinner(model1);
     private JButton submitButton = new JButton("Submit");
+    private JTextField phoneNumber = new JTextField();
     JRadioButton monthOrDate = new JRadioButton();
     //TO-DO add radio button that lets user choose a specific date, or cheapest flight within a month
     String[] airports = {"SAN", "LAX", "FAT", "JFK", "SEA", "PAX"};
@@ -29,7 +34,7 @@ public class VacationView extends JFrame {
     VacationView(){
         JPanel vacPanel = new JPanel();
         vacPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 20));
-        this.setSize(700, 350);
+        this.setSize(750, 400);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setTitle("Vacation Tracker");
@@ -58,6 +63,11 @@ public class VacationView extends JFrame {
         ListenForSubmit lForSubmit = new ListenForSubmit();
         submitButton.addActionListener(lForSubmit);
 
+        MaxLengthTextDocument maxLength = new MaxLengthTextDocument();
+        maxLength.setMaxChars(10);
+        phoneNumber.setColumns(10);
+        phoneNumber.setDocument(maxLength);
+
         vacPanel.add(depFlight);
         vacPanel.add(depScroller);
         vacPanel.add(date2);
@@ -68,6 +78,8 @@ public class VacationView extends JFrame {
         vacPanel.add(destScroller);
         vacPanel.add(date);
         vacPanel.add(destDate);
+        vacPanel.add(enterPhoneNumber);
+        vacPanel.add(phoneNumber);
         vacPanel.add(submitButton);
 
         this.add(vacPanel);
@@ -90,6 +102,8 @@ public class VacationView extends JFrame {
         return ((Date) destDate.getValue());
     }
 
+    public String getPhoneNumer(){ return phoneNumber.getText();}
+
     public int getNumOfPassengers(){
         return (Integer) numOfPassengers.getValue();
     }
@@ -105,6 +119,22 @@ public class VacationView extends JFrame {
                 JOptionPane.showMessageDialog(VacationView.this, "Airport of Departure: "+ getDepAirpot() + "\nDeparture Date: " + getDepDate() + "\nDestination Airport: " + getDestAirpot() + "\nReturn Date: " + getDestDate()+ "\nNumber of Passengers: "+getNumOfPassengers());
             }
 
+        }
+    }
+
+    public class MaxLengthTextDocument extends PlainDocument {
+        private int maxChars;
+
+        @Override
+        public void insertString(int offs, String str, AttributeSet a)
+                throws BadLocationException {
+            if(str != null && (getLength() + str.length() <= maxChars)){
+                super.insertString(offs, str, a);
+            }
+        }
+
+        public void setMaxChars(int maxCharacters) {
+            this.maxChars = maxCharacters;
         }
     }
 

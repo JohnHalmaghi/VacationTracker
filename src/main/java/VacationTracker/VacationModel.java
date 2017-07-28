@@ -1,5 +1,6 @@
 package VacationTracker;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class VacationModel {
@@ -8,14 +9,25 @@ public class VacationModel {
     private int numOfDays, numOfLayovers;
     private double cost;
     public Flight flight;
-    protected ArrayList<Flight> listOfFlight = new ArrayList<Flight>();
+    protected ArrayList<Flight> listOfFlights = new ArrayList<Flight>();
+    protected SmsSender textMessage = new SmsSender(); //Get from theView
+
+    public VacationModel() throws URISyntaxException {
+    }
 
     public void addFlightToListOfFlights(Flight flight){
-        listOfFlight.add(flight);
+        listOfFlights.add(flight);
     }
 
     public String createAPICall(Flight f){
         return null;
+    }
+
+    public void sendUpdate(String toPhoneNumber) throws URISyntaxException {
+        textMessage = new SmsSender();
+    }
+    public SmsSender getSmsSender(){
+        return textMessage;
     }
 
     //Call API, get JSON

@@ -2,6 +2,7 @@ package VacationTracker;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URISyntaxException;
 import java.util.Date;
 
 public class VacationController {
@@ -12,7 +13,6 @@ public class VacationController {
     public VacationController(VacationView theView, VacationModel theModel){
         this.theView = theView;
         this.theModel = theModel;
-
         this.theView.addSubmitListener(new SubmitListener());
     }
 
@@ -26,6 +26,13 @@ public class VacationController {
             f.setRetDate(theView.getDestDate());
             f.setNumberOfPassengers(theView.getNumOfPassengers());
             theModel.addFlightToListOfFlights(f);
+            theModel.getSmsSender().setMessage(f.getSourceCity(),f.getDepDate().toString(),f.getDestinationCity(),f.getRetDate().toString(), 1.1);
+            theModel.getSmsSender().sendMessage(theView.getPhoneNumer());
+            try {
+                theModel.sendUpdate(theView.getPhoneNumer());
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
