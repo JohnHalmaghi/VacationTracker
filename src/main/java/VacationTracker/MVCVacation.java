@@ -1,10 +1,11 @@
 package VacationTracker;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class MVCVacation {
-    public static void main(String args[]) throws ClassNotFoundException {
+    public static void main(String args[]) throws ClassNotFoundException, URISyntaxException {
         VacationView theView = new VacationView();
         final VacationModel theModel = new VacationModel();
         VacationController theController = new VacationController(theView, theModel);
@@ -12,7 +13,7 @@ public class MVCVacation {
 
         try {
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename)); //will throw exception if data.bin is empty
-            theModel.listOfFlight = (ArrayList<Flight>) inputStream.readObject();
+            theModel.listOfFlights = (ArrayList<Flight>) inputStream.readObject();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -21,7 +22,7 @@ public class MVCVacation {
             public void run() {
                 try {
                     ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filename));
-                    outputStream.writeObject(theModel.listOfFlight);
+                    outputStream.writeObject(theModel.listOfFlights);
                     outputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
