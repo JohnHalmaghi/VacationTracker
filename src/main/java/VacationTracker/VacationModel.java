@@ -1,18 +1,27 @@
 package VacationTracker;
 
+import org.joda.time.LocalDateTime;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class VacationModel {
 
-    private String fromDate, toDate, depAirport, destAirport;
-    private int numOfDays, numOfLayovers;
-    private double cost;
-    public Flight flight;
+    private Flight flight;
     protected ArrayList<Flight> listOfFlights = new ArrayList<Flight>();
+    private LocalDateTime creationTime = new LocalDateTime();
     protected SmsSender textMessage = new SmsSender(); //Get from theView
 
     public VacationModel() throws URISyntaxException {
+        creationTime = LocalDateTime.now();
+    }
+
+    public Flight getFlight(){
+        return this.flight;
+    }
+
+    public void setFlight(Flight f){
+        flight = f;
     }
 
     public void addFlightToListOfFlights(Flight flight){

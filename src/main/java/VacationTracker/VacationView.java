@@ -5,12 +5,9 @@ import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Calendar;
-/**
- * Created by john on 7/24/17.
- */
+
 public class VacationView extends JFrame {
 
     private JLabel depFlight = new JLabel("Departure Flight Information:   "); //extra spaces for alignment

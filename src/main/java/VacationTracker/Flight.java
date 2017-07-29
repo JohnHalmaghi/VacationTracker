@@ -1,19 +1,25 @@
 package VacationTracker;
 
+import org.joda.time.LocalDateTime;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Flight implements Serializable{
 
-    public void Flight(){}
     private Date depDate, retDate;
-    private String destinationCity;
-    private String sourceCity;
+    private String destAirport;
+    private String depAirport;
     private int numberOfLayovers;
     private String airline;
     private int numberOfPassengers;
     private double lowestPriceToDate;
+    private LocalDateTime priceLastChecked;
+    private ArrayList<Double> listOfPrices = new ArrayList<Double>();
+
+    public Flight(){}
 
     public void setDepDate(Date depDate){ this.depDate = depDate;}
 
@@ -30,13 +36,17 @@ public class Flight implements Serializable{
         return (stringDate);
     }
 
-    public void setDestinationCity(String destCity){ this.destinationCity = destCity; }
+    public LocalDateTime getPriceLastChecked(){
+        return priceLastChecked;
+    }
 
-    public String getDestinationCity(){ return destinationCity; }
+    public void setDestAirport(String destCity){ this.destAirport = destCity; }
 
-    public void setSourceCity(String sourceCity) { this.sourceCity = sourceCity; }
+    public String getDestAirport(){ return destAirport; }
 
-    public String getSourceCity() { return this.sourceCity; }
+    public void setDepAirport(String depAirport) { this.depAirport = depAirport; }
+
+    public String getDepAirport() { return this.depAirport; }
 
     public void setNumberOfLayovers(int layoverCount) { numberOfLayovers = layoverCount; }
 
@@ -50,12 +60,29 @@ public class Flight implements Serializable{
 
     public int getNumberOfPassengers(){ return numberOfPassengers; }
 
-    public void setLowestPriceToDate(double flightPrice){ lowestPriceToDate = flightPrice; }
+    public void setLowestPriceToDate(double flightPrice){
+        lowestPriceToDate = flightPrice;
+    }
 
     public double getLowestPriceToDate(){ return lowestPriceToDate; }
 
-    public String alertMessage(double newLowPrice){
-        String messageString = "You're tracked flight from "+getSourceCity() +" departing on "+getDepDate().toString()+ " to "+getDestinationCity()+ " returning on "+ getRetDate().toString() +" has a new low price of $" + newLowPrice+".";
-        return messageString;
+    public void addToListOfPricesandUpdatepriceLastChecked(Double price){
+        priceLastChecked = LocalDateTime.now();
+        listOfPrices.add(price);
     }
+    public Double getAvgPriceOfFlight(){
+        Double avg = 0.0;
+        for(Double price : listOfPrices){
+            avg += price;
+        }
+        avg = avg/listOfPrices.size();
+        return avg;
+    }
+
+    public boolean hoursHavePassedSinceLastPriceCheck(int hours){
+        if(priceLastChecked.plusHours(hours).isBefore(LocalDateTime.now())){
+            return true;
+        } else return false;
+    }
+
 }

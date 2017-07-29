@@ -7,27 +7,20 @@ import java.net.URISyntaxException;
 
     public class SmsSender {
         private static final String twilioAccountSID = "AC519fff50ccdd4c7276b310366f6b33c7";
-        private static final String twilioAuthToken = "AuthTokenGoesHere";
+        private static final String twilioAuthToken = "totallylegitauthenticationtoken";
         private static final PhoneNumber twilioPhoneNumber = new PhoneNumber("+16196484344 ");
-        public PhoneNumber toPhoneNumber;
-        private String messageString;
-
 
         public SmsSender() throws URISyntaxException{
 
         }
-        public void setToPhoneNumber(String toPhoneNum){
-            toPhoneNumber = new PhoneNumber(toPhoneNum);
-        }
-        public void setMessage(String message){
-            messageString = message;
-        }
-        public String getMessage(){
-            return messageString;
-        }
-        public void sendMessage(String toNumber){
+
+        public void sendMessage(String toNumber, String messageToSend){
             Twilio.init(twilioAccountSID, twilioAuthToken);
-            Message message = Message.creator((new PhoneNumber(toNumber)),twilioPhoneNumber, getMessage()).create();
+            Message message = Message.creator((new PhoneNumber(toNumber)),twilioPhoneNumber, messageToSend).create();
+        }
+        public String alertMessage(String depAirport, String depDate, String destCity, String retDate, double newLowPrice){
+            String messageString = "You're tracked flight from "+ depAirport +" departing on "+ depDate + " to "+ destCity + " returning on "+ retDate +" has a new low price of $" + newLowPrice+".";
+            return messageString;
         }
 
     }

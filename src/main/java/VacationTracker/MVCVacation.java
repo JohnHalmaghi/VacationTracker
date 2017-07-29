@@ -2,14 +2,18 @@ package VacationTracker;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MVCVacation {
     public static void main(String args[]) throws ClassNotFoundException, URISyntaxException {
         VacationView theView = new VacationView();
         final VacationModel theModel = new VacationModel();
-        VacationController theController = new VacationController(theView, theModel);
+        final VacationController theController = new VacationController(theView, theModel);
         final String filename = "data.bin";
+        final Timer timer = new Timer();
 
         try {
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename)); //will throw exception if data.bin is empty
@@ -31,5 +35,18 @@ public class MVCVacation {
             }
         }));
         theView.setVisible(true);
+
+        TimerTask checkPrices = new TimerTask() {
+            @Override
+            public void run() {
+                theModel.getSmsSender().sendMessage("8582049506", theModel.getSmsSender().alertMessage("This is a test of the timer function","","","",0.0));
+                for(Flight flight : theModel.listOfFlights){
+                    if(flight.hoursHavePassedSinceLastPriceCheck(2)){
+                        //update price
+                    }
+                }
+            }
+        };
+        timer.schedule(checkPrices, 01, 1000*60*60*2);
     }
 }
