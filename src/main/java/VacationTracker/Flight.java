@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by john on 7/18/17.
- */
 public class Flight implements Serializable{
 
     public void Flight(){}
@@ -16,7 +13,7 @@ public class Flight implements Serializable{
     private int numberOfLayovers;
     private String airline;
     private int numberOfPassengers;
-    private double price;
+    private double lowestPriceToDate;
 
     public void setDepDate(Date depDate){ this.depDate = depDate;}
 
@@ -53,9 +50,12 @@ public class Flight implements Serializable{
 
     public int getNumberOfPassengers(){ return numberOfPassengers; }
 
-    public void setPrice(double flightPrice){ price = flightPrice; }
+    public void setLowestPriceToDate(double flightPrice){ lowestPriceToDate = flightPrice; }
 
-    public double getPrice(){ return price; }
+    public double getLowestPriceToDate(){ return lowestPriceToDate; }
 
-
+    public String alertMessage(double newLowPrice){
+        String messageString = "You're tracked flight from "+getSourceCity() +" departing on "+getDepDate().toString()+ " to "+getDestinationCity()+ " returning on "+ getRetDate().toString() +" has a new low price of $" + newLowPrice+".";
+        return messageString;
+    }
 }
