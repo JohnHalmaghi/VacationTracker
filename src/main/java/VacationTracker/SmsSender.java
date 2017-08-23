@@ -7,7 +7,7 @@ import java.net.URISyntaxException;
 
     public class SmsSender {
         private static final String twilioAccountSID = "AC519fff50ccdd4c7276b310366f6b33c7";
-        private static final String twilioAuthToken = "totallylegitauthenticationtoken";
+        private static final String twilioAuthToken = "d4f39fd2591802a54611918bbc405171";
         private static final PhoneNumber twilioPhoneNumber = new PhoneNumber("+16196484344 ");
 
         public SmsSender() throws URISyntaxException{

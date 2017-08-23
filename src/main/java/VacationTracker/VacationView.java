@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Calendar;
 
@@ -23,8 +24,7 @@ public class VacationView extends JFrame {
     private JSpinner depDate, destDate, numOfPassengers = new JSpinner(model1);
     private JButton submitButton = new JButton("Submit");
     private JTextField phoneNumber = new JTextField();
-    JRadioButton monthOrDate = new JRadioButton();
-    //TO-DO add radio button that lets user choose a specific date, or cheapest flight within a month
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     String[] airports = {"SAN", "LAX", "FAT", "JFK", "SEA", "PAX"};
 
 
@@ -47,12 +47,13 @@ public class VacationView extends JFrame {
         destScroller = new JScrollPane(destAirports, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         Date todaysDate = new Date();
+        SimpleDateFormat model = new SimpleDateFormat("yyyy-MM-dd");
 
         depDate = new JSpinner(new SpinnerDateModel(todaysDate, null, null, Calendar.DAY_OF_MONTH));
         destDate = new JSpinner(new SpinnerDateModel(todaysDate, null, null, Calendar.DAY_OF_MONTH));
 
-        JSpinner.DateEditor depDateEditor = new JSpinner.DateEditor(depDate, "MM/dd/yyyy");
-        JSpinner.DateEditor destDateEditor = new JSpinner.DateEditor(destDate, "MM/dd/yyyy");
+        JSpinner.DateEditor depDateEditor = new JSpinner.DateEditor(depDate, model.toPattern());
+        JSpinner.DateEditor destDateEditor = new JSpinner.DateEditor(destDate, model.toPattern());
 
         depDate.setEditor(depDateEditor);
         destDate.setEditor(destDateEditor);
@@ -91,12 +92,14 @@ public class VacationView extends JFrame {
         return (String) destAirports.getSelectedValue();
     }
 
-    public Date getDepDate() { //TEST to make sure this works
-        return ((Date) depDate.getValue());
+    public String getDepDate() {
+        String dateToStr = format.format(depDate.getValue());
+        return (dateToStr);
     }
 
-    public Date getDestDate(){
-        return ((Date) destDate.getValue());
+    public String getDestDate(){
+        String dateToStr = format.format(destDate.getValue());
+        return (dateToStr);
     }
 
     public String getPhoneNumer(){ return phoneNumber.getText();}

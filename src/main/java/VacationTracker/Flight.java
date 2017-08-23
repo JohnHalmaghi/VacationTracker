@@ -1,7 +1,9 @@
 package VacationTracker;
 
 import org.joda.time.LocalDateTime;
+import org.json.JSONException;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,7 +11,7 @@ import java.util.Date;
 
 public class Flight implements Serializable{
 
-    private Date depDate, retDate;
+    private String depDate, retDate;
     private String destAirport;
     private String depAirport;
     private int numberOfLayovers;
@@ -17,24 +19,21 @@ public class Flight implements Serializable{
     private int numberOfPassengers;
     private double lowestPriceToDate;
     private LocalDateTime priceLastChecked;
+    private QPXAccessor qpx;
     private ArrayList<Double> listOfPrices = new ArrayList<Double>();
 
     public Flight(){}
 
-    public void setDepDate(Date depDate){ this.depDate = depDate;}
+    public void setDepDate(String depDate){ this.depDate = depDate;}
 
-    public void setRetDate(Date retDate){ this.retDate = retDate;}
+    public void setRetDate(String retDate){ this.retDate = retDate;}
 
-    public Date getDepDate(){return depDate;}
-
-    public Date getRetDate(){return  retDate;}
-
-    public String getDateAsString(Date date){ //TEST to make sure this works
-        String stringDate = new SimpleDateFormat("MM/dd/yyyy").format(date);
-        stringDate = stringDate.replaceAll("/", "-");
-
-        return (stringDate);
+    public String getDepDate(){
+        return depDate;
     }
+
+    public String getRetDate(){return  retDate;}
+
 
     public LocalDateTime getPriceLastChecked(){
         return priceLastChecked;
@@ -64,12 +63,15 @@ public class Flight implements Serializable{
         lowestPriceToDate = flightPrice;
     }
 
-    public double getLowestPriceToDate(){ return lowestPriceToDate; }
+    public double getLowestPriceToDate() throws IOException, JSONException {
+        qpx = new QPXAccessor(this);
+        return qpx.getLowestPrice(); }
 
     public void addToListOfPricesandUpdatepriceLastChecked(Double price){
         priceLastChecked = LocalDateTime.now();
         listOfPrices.add(price);
     }
+
     public Double getAvgPriceOfFlight(){
         Double avg = 0.0;
         for(Double price : listOfPrices){

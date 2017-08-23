@@ -1,5 +1,7 @@
 package VacationTracker;
 
+import org.json.JSONException;
+
 import java.io.*;
 import java.net.URISyntaxException;
 import java.sql.Time;
@@ -39,10 +41,19 @@ public class MVCVacation {
         TimerTask checkPrices = new TimerTask() {
             @Override
             public void run() {
-                theModel.getSmsSender().sendMessage("8582049506", theModel.getSmsSender().alertMessage("This is a test of the timer function","","","",0.0));
                 for(Flight flight : theModel.listOfFlights){
                     if(flight.hoursHavePassedSinceLastPriceCheck(2)){
-                        //update price
+                        try {
+                            double lowestPrice = flight.getLowestPriceToDate();
+                            flight.addToListOfPricesandUpdatepriceLastChecked(lowestPrice);
+                            if(lowestPrice/flight.getAvgPriceOfFlight() < .85){
+                                theModel.getSmsSender().sendMessage("8582049506", theModel.getSmsSender().alertMessage(flight.getDepAirport(),flight.getDepDate(),flight.getDestAirport(),flight.getRetDate(),lowestPrice));
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

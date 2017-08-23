@@ -1,7 +1,10 @@
 package VacationTracker;
 
+import org.json.JSONException;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class VacationController {
@@ -21,11 +24,17 @@ public class VacationController {
             Flight f = new Flight();
             f.setDepAirport(theView.getDepAirpot()); //maybe create in constructor?
             f.setDestAirport(theView.getDestAirpot());
-            f.setDepDate(theView.getDepDate());
-            f.setRetDate(theView.getDestDate());
+            f.setDepDate(theView.getDepDate().toString());
+            f.setRetDate(theView.getDestDate().toString());
             f.setNumberOfPassengers(theView.getNumOfPassengers());
             theModel.addFlightToListOfFlights(f);
-            theModel.getSmsSender().sendMessage(theView.getPhoneNumer(), theModel.getSmsSender().alertMessage(f.getDepAirport(), f.getDateAsString(f.getDepDate()), f.getDestAirport(), f.getDateAsString(f.getRetDate()), f.getLowestPriceToDate()));
+            try {
+                theModel.getSmsSender().sendMessage(theView.getPhoneNumer(), theModel.getSmsSender().alertMessage(f.getDepAirport(), f.getDepDate(), f.getDestAirport(), f.getRetDate(), f.getLowestPriceToDate()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             try {
                 theModel.sendUpdate(theView.getPhoneNumer());
             } catch (URISyntaxException e) {

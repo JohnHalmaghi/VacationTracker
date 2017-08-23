@@ -11,6 +11,7 @@ public class VacationModel {
     protected ArrayList<Flight> listOfFlights = new ArrayList<Flight>();
     private LocalDateTime creationTime = new LocalDateTime();
     protected SmsSender textMessage = new SmsSender(); //Get from theView
+    private QPXAccessor qpx;
 
     public VacationModel() throws URISyntaxException {
         creationTime = LocalDateTime.now();
